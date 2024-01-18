@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model comics {
+  id          Int      @id
+  ComicTitle  String   @unique @db.VarChar(255)
+  Description String   @db.LongText
+  CoverImage  String   @db.VarChar(255)
+  Origin      String   @db.VarChar(55)
+  Status      String   @db.VarChar(55)
+  Genre       String?  @db.VarChar(255)
+  Author      String?  @db.VarChar(255)
+  Artist      String?  @db.VarChar(255)
+  Badges      String?  @db.VarChar(255)
+  Date        DateTime @default(now())
+}
+
+model chapters {
+  chapterID     Int      @id
+  ComicTitle    String   @db.VarChar(255)
+  comicID       Int      @db.Int
+  ChapterNumber Int      @db.Int
+  ChapterName   String   @db.VarChar(100)
+  pages         String   @db.LongText
+  chapterDate   DateTime @default(dbgenerated())
+}
+
+model users {
+  id       Int    @id @default(autoincrement())
+  Email    String @unique @db.VarChar(55)
+  UserName String @db.VarChar(55)
+  Password String @db.VarChar(200)
+}
+
+model admin {
+  id       Int    @id @default(autoincrement())
+  Email    String @unique @db.VarChar(55)
+  UserName String @db.VarChar(55)
+  Password String @db.VarChar(200)
+}
