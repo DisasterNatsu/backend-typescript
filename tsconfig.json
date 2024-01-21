@@ -11,7 +11,8 @@
     "esModuleInterop": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["node", "express", "./types/express.d.ts"]
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*.ts"],

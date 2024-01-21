@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
@@ -67,5 +68,53 @@ export const AdminLogIn = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Email or Password is incorrect" });
   }
 
-  return res.status(200).json({ message: "Great Success!" });
+  try {
+    // validate the email and password
+    const adminInDb = await prisma.admin.findFirst({
+      where: {
+        Email: email,
+      },
+    });
+
+    // if admin
+
+    if (adminInDb?.Email) {
+      // check if password is vaid
+
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        adminInDb.Password
+      );
+
+      // if password is valid
+
+      if (isPasswordValid) {
+        // assign a token
+
+        const token = jwt.sign(
+          { email: adminInDb.Email },
+          process.env.ADMIN_JWT_PASSWORD!,
+          {
+            expiresIn: "48h",
+          }
+        );
+
+        // return token with email and user name
+
+        return res.status(200).json({
+          authToken: token,
+          email: adminInDb.Email,
+          UserName: adminInDb.UserName,
+        });
+      }
+    }
+
+    // default return
+
+    return res.status(403).json({ message: "Unauthorised" });
+  } catch (error) {
+    return res.status(500).json({ error, message: "Some error occured!" });
+  } finally {
+    return async () => prisma.$disconnect();
+  }
 };

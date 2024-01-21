@@ -14,6 +14,8 @@ export const postComic = async (req: Request, res: Response) => {
     coverImage,
   } = req.body;
 
+  console.log(req.body);
+
   if (!comicTitle || !description || !origin || !status || !genres) {
     return res
       .status(401)
@@ -24,5 +26,5 @@ export const postComic = async (req: Request, res: Response) => {
 
   const id = randomId();
 
-  return res.status(200).json({ message: "Working" });
+  return res.status(200).json({ message: "Working", id });
 };
