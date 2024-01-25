@@ -1,6 +1,7 @@
 import decompress from "decompress";
 import { NextFunction, Request, Response } from "express";
 import fs from "fs";
+import { tempDir } from "helpers/tempDir";
 import path from "path";
 
 export const UnZip = async (
@@ -8,8 +9,7 @@ export const UnZip = async (
   res: Response,
   next: NextFunction
 ) => {
-  const __dirname = path.resolve();
-  const dir = path.join(__dirname, "chapterTemp");
+  const { dir } = tempDir({ folder: "chapterTemp" });
 
   try {
     if (!fs.existsSync(dir)) {

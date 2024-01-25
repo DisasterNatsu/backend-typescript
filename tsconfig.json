@@ -18,5 +18,9 @@
   "include": ["src/**/*.ts"],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
-  }
+  },
+  "files": [
+    // ... other files
+    "typings.d.ts"
+  ]
 }

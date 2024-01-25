@@ -1,20 +1,15 @@
 import multer from "multer";
-import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import { NextFunction, Request, Response } from "express";
-import path from "path";
+import { tempDir } from "helpers/tempDir";
 
 export const UploadComicCover = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const __dirname = path.resolve(); // getting the path
-
   // create a temporary directory to store the zip file for further prossesing
-  let dir = path.join(__dirname, "temp");
-
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }); // if the 'temp' folder doesn't exists, create one
+  const { dir } = tempDir({ folder: "temp" });
 
   // define storage
 
