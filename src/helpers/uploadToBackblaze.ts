@@ -3,16 +3,8 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import { getUrlEncodedFileName } from "./getUrlEncodedFileName";
-
-// args
-
-// {
-//     uploadUrl,
-//     authToken,
-//     mime,
-//     fileName,
-//     data,
-//   }: uploadToBackBlazeProps
+import axios from "axios";
+import { getUploadUrl } from "./backBlazeGetUploadUrl";
 
 const sha1 = (fileData: Buffer) => {
   const hash = crypto.createHash("sha1");
@@ -21,35 +13,58 @@ const sha1 = (fileData: Buffer) => {
 };
 
 export const uploadToBackBlaze = async ({
-  uploadUrl,
-  authToken,
   mime,
   targetDir,
+  bucketId,
+  apiUrl,
+  authorizationToken,
 }: uploadToBackBlazeProps) => {
   // declare dir
 
   const { dir } = tempDir({ folder: targetDir });
 
+  const fileType = mime;
+
   // get the files from the dir
 
   const filesArray = fs.readdirSync(dir);
-};
 
-const uploadFunction = (options: UploadOptions) => {
-  const uploadAuthToken = options.authToken;
-  const data = options.data;
-  const mime = options.mime;
-  const length = options.contentLength || data.byteLength || data.length;
-  const uploadUrl = options.url;
-  const fileName = getUrlEncodedFileName(options.fileName);
+  const uploadPromises = filesArray.map(async (file) => {
+    // get upload url for every file
 
-  // define headers
+    const urlRes = await getUploadUrl({
+      apiUrl: apiUrl,
+      authorizationToken: authorizationToken,
+      bucketId: bucketId,
+    });
 
-  const headers = {
-    Authorization: uploadAuthToken,
-    "Content-Type": mime || "b2/x-auto",
-    "Content-Length": length,
-    "X-Bz-File-Name": fileName,
-    "X-Bz-Content-Sha1": data ? sha1(data) : null,
-  };
+    const { uploadUrlToken, uploadUrl } = urlRes as UploadUrlResult;
+
+    // get fileData
+
+    const data = fs.readFileSync(path.join(dir, file)); // filedata
+    const uploadFileName = path.join(file); // file name
+    const url = uploadUrl; // upload Url
+    const token = uploadUrlToken;
+    const urlEncodedFileName = getUrlEncodedFileName(uploadFileName);
+
+    const headers = {
+      Authorization: token,
+      "Content-Type": mime || "b2/x-auto",
+      "Content-Length": data.byteLength || data.length,
+      "X-Bz-File-Name": urlEncodedFileName,
+      "X-Bz-Content-Sha1": data ? sha1(data) : null,
+    };
+
+    try {
+      const backBlazeRes = await axios.post(uploadUrl, data, { headers });
+      return backBlazeRes.data.fileId;
+    } catch (error) {
+      return console.log(error);
+    }
+  });
+
+  const ids = await Promise.all(uploadPromises);
+
+  return ids;
 };

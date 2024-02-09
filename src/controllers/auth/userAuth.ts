@@ -33,7 +33,7 @@ export const Register = async (req: Request, res: Response) => {
   try {
     // check if an account with the same email already exists
 
-    const userInDb = await prisma.users.findUnique({
+    const userInDb = await prisma.users.findFirst({
       where: {
         Email: email,
       },
@@ -88,7 +88,7 @@ export const SignIn = async (req: Request, res: Response) => {
   try {
     // check if an account with the provided email exists
 
-    const userInDb = await prisma.users.findUnique({
+    const userInDb = await prisma.users.findFirst({
       where: {
         Email: email,
       },

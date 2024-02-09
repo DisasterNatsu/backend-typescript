@@ -23,10 +23,11 @@ interface Folder {
 }
 
 interface uploadToBackBlazeProps {
-  uploadUrl: string;
-  authToken: string;
   mime: string;
   targetDir: string;
+  bucketId: string;
+  apiUrl: string;
+  authorizationToken: string;
 }
 
 interface UploadOptions {
@@ -34,6 +35,26 @@ interface UploadOptions {
   url: string;
   mime: string;
   data: Buffer;
-  contentLength: number | undefined;
+  contentLength?: number | undefined;
   fileName: string;
+}
+
+interface BackBlazeResponse {
+  accountId: string;
+  action: string;
+  bucketId: string;
+  contentLength: number;
+  contentMd5: string;
+  contentSha1: string;
+  contentType: string;
+  fileId: string;
+  fileInfo: object;
+  fileName: string;
+  fileRetention: {
+    isClientAuthorizedToRead: boolean;
+    value: { mode: string | null; retainUntilTimestamp: string | null };
+  };
+  legalHold: { isClientAuthorizedToRead: boolean; value: null };
+  serverSideEncryption: { algorithm: any | null; mode: any | null };
+  uploadTimestamp: number;
 }

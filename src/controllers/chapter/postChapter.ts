@@ -61,7 +61,7 @@ export const PostChapter = async (req: Request, res: Response) => {
       chapterID: id,
       ComicTitle: comicTitle,
       comicID: comicID,
-      ChapterNumber: number,
+      ChapterNumber: JSON.stringify(number),
       ChapterName: chapterName,
       pages: imageIds,
     };
@@ -78,7 +78,7 @@ export const PostChapter = async (req: Request, res: Response) => {
         message: `Chapter ${newChapter.ChapterNumber} was uploaded successfully!`,
         link: `https://disasterscans.com/comics/${
           newChapter.comicID
-        }-${newChapter.ComicTitle.toLocaleLowerCase().split(" ").join("-")}/${
+        }-${newChapter.ComicTitle?.toLocaleLowerCase().split(" ").join("-")}/${
           newChapter.chapterID
         }-chapter-${newChapter.ChapterNumber}`,
       })

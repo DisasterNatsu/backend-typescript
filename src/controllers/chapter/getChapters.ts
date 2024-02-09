@@ -5,6 +5,8 @@ import { ParseParams, ParseParamsChapter } from "helpers/urlParser";
 const prisma = new PrismaClient();
 
 export const AllChapters = async (req: Request, res: Response) => {
+  console.log("Here");
+
   // parsing the params to get the data needed
 
   const { id, title } = ParseParams(req.params.comicName);
@@ -18,15 +20,10 @@ export const AllChapters = async (req: Request, res: Response) => {
         ChapterNumber: true,
         ChapterName: true,
         chapterDate: true,
-        comic: {
-          select: {
-            CoverImage: true,
-          },
-        },
       },
       where: {
         ComicTitle: title,
-        comicID: id,
+        comicID: JSON.stringify(id),
       },
       orderBy: {
         ChapterNumber: "desc",
@@ -43,7 +40,7 @@ export const AllChapters = async (req: Request, res: Response) => {
       },
       where: {
         ComicTitle: title,
-        id: id,
+        id: JSON.stringify(id),
       },
     });
 
@@ -85,9 +82,9 @@ export const ChapterPages = async (req: Request, res: Response) => {
         pages: true,
       },
       where: {
-        comicID: id,
+        comicID: JSON.stringify(id),
         chapterID: chapterID,
-        ChapterNumber: chapterNumber,
+        ChapterNumber: JSON.stringify(chapterNumber),
       },
     });
     return res.status(200).json(comicPages);

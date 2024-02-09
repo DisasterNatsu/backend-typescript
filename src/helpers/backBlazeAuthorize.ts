@@ -15,8 +15,6 @@ export const backblazeAuthorize = async ({
 
   const authTokenB2 = "Basic " + base64;
 
-  console.log(authTokenB2);
-
   try {
     const Authorize = await Axios.get(
       "https://api.backblazeb2.com/b2api/v3/b2_authorize_account",
@@ -35,7 +33,7 @@ export const backblazeAuthorize = async ({
 
     // get auth token
 
-    const authorizationToken = res.apiInfo.authorizationToken;
+    const authorizationToken = res.authorizationToken;
 
     return {
       apiUrl,

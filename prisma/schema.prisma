@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model admin {
+  id       Int    @id @default(autoincrement())
+  Email    String @db.VarChar(100)
+  UserName String @db.VarChar(100)
+  Password String @db.VarChar(255)
+}
+
+model chapters {
+  chapterID     Int       @id
+  ComicTitle    String?   @db.VarChar(255)
+  comicID       String    @db.VarChar(255)
+  ChapterNumber String    @db.VarChar(255)
+  ChapterName   String?   @db.VarChar(255)
+  pages         String    @db.LongText
+  chapterDate   DateTime? @default(now()) @db.DateTime(0)
+}
+
+model comics {
+  id          String    @id @db.VarChar(255)
+  ComicTitle  String    @db.VarChar(255)
+  Description String    @db.LongText
+  CoverImage  String    @db.VarChar(255)
+  Origin      String    @db.VarChar(255)
+  Status      String    @db.VarChar(255)
+  Genres      String    @db.VarChar(255)
+  Author      String?   @db.VarChar(255)
+  Artist      String?   @db.VarChar(255)
+  Badges      String?   @db.VarChar(255)
+  Date        DateTime? @default(now()) @db.DateTime(0)
+}
+
+model users {
+  id       Int    @id @default(autoincrement())
+  Email    String @db.VarChar(100)
+  UserName String @db.VarChar(100)
+  Password String @db.VarChar(255)
+}

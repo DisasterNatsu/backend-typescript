@@ -29,7 +29,7 @@ export const adminTokenAuth = async (req: Request, res: Response) => {
 
     // check for the user's details in db
 
-    const adminInDb = await prisma.admin.findUnique({
+    const adminInDb = await prisma.admin.findFirst({
       where: {
         Email: isVerified.email,
       },

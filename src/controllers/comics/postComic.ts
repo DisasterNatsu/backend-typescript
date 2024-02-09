@@ -46,6 +46,8 @@ export const postComic = async (req: Request, res: Response) => {
       Badges: badge,
     };
 
+    // @ts-ignore
+
     const postComictoDb = await prisma.comics.create({ data });
 
     // if successfull

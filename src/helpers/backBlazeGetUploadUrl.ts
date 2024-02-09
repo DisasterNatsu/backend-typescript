@@ -24,8 +24,12 @@ export const getUploadUrl = async ({
     bucketId: bucketId,
   };
 
+  const newApiUrl = apiUrl + "/b2api/v3/b2_get_upload_url";
+
   try {
-    const response = await Axios.post(apiUrl, data, { headers });
+    const response = await Axios.post(newApiUrl, data, {
+      headers,
+    });
 
     const resData = await response.data;
 

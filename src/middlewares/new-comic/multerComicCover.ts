@@ -2,6 +2,7 @@ import multer from "multer";
 import { v4 as uuidv4 } from "uuid";
 import { NextFunction, Request, Response } from "express";
 import { tempDir } from "helpers/tempDir";
+import fs from "fs";
 
 export const UploadComicCover = (
   req: Request,
@@ -10,6 +11,8 @@ export const UploadComicCover = (
 ) => {
   // create a temporary directory to store the zip file for further prossesing
   const { dir } = tempDir({ folder: "temp" });
+
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 
   // define storage
 
@@ -59,6 +62,8 @@ export const UploadComicCover = (
 
   upload(req, res, (err) => {
     if (err) {
+      console.log(err);
+
       return res
         .status(500)
         .json({ error: err, message: "Something went wrong with multer" });

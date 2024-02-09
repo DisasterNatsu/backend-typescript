@@ -6,7 +6,6 @@ import { NextFunction, Request, Response } from "express";
 import { backblazeAuthorize } from "helpers/backBlazeAuthorize";
 import { tempDir } from "helpers/tempDir";
 import { uploadToBackBlaze } from "helpers/uploadToBackblaze";
-import { getUploadUrl } from "helpers/backBlazeGetUploadUrl";
 
 const readdirAsync = promisify(fs.readdir);
 
@@ -15,6 +14,10 @@ export const CoverUploadToBackBlaze = async (
   res: Response,
   next: NextFunction
 ) => {
+  // define the dir
+
+  const { dir } = tempDir({ folder: "temp" });
+
   // try catch block
 
   try {
@@ -34,72 +37,31 @@ export const CoverUploadToBackBlaze = async (
     // // Use type assertion to inform TypeScript about the actual type
     const { apiUrl, authToken } = result as BackblazeAuthorizeResult;
 
-    // // bucketid
+    // bucketid
 
     const bucketID = process.env.BACKBLAZE_BUCKET_ID!;
-
-    const urlRes = await getUploadUrl({
-      apiUrl: apiUrl,
-      authorizationToken: authToken,
-      bucketId: bucketID,
-    });
-
-    // // Use type assertion to inform TypeScript about the actual type
-
-    const { uploadUrlToken, uploadUrl } = urlRes as UploadUrlResult;
 
     // declare mimetype
 
     const mime = "image/png" || "image/jpg" || "image/jpeg" || "image/webp";
 
     const fileId = await uploadToBackBlaze({
-      authToken: uploadUrlToken,
       targetDir: "temp",
       mime: mime,
-      uploadUrl: uploadUrl,
+      bucketId: bucketID,
+      apiUrl: apiUrl,
+      authorizationToken: authToken,
     });
 
-    return res.status(200).json("Debugging");
+    req.coverImage = fileId[0];
 
-    // await b2.authorize(); // authorizing the b2
+    fs.rmdirSync(dir, { recursive: true });
 
-    // // define bucket id
-
-    // const bucketID = process.env.BACKBLAZE_BUCKET_ID!;
-
-    // // reading the files in the folder
-
-    // const files = await readdirAsync(dir);
-
-    // // maping through the files in the temp dir
-
-    // const uploadPromises = files.map(async (file) => {
-    //   const fileData = fs.readFileSync(path.join(dir, file)); // the file
-    //   const uploadFileName = path.join(file); // the filename
-    //   const uploadUrl = await b2.getUploadPartUrl({ fileId: bucketID }); // getting the upload url
-
-    //   // uploading the files
-
-    //   const response = await b2.uploadFile({
-    //     uploadUrl: uploadUrl.data.uploadUrl,
-    //     uploadAuthToken: uploadUrl.data.authorizationToken,
-    //     fileName: uploadFileName,
-    //     data: fileData,
-    //     mime: mime.lookup(file) || "application/octet-stream",
-    //   });
-
-    //   req.coverImage = response.data.fileId;
-    // });
-
-    // await Promise.all(uploadPromises);
-
-    // fs.rmdirSync(dir, { recursive: true });
-
-    // next();
+    next();
   } catch (error) {
     // remove images
 
-    // fs.rmdirSync(dir, { recursive: true });
+    fs.rmdirSync(dir, { recursive: true });
 
     console.log(error);
 

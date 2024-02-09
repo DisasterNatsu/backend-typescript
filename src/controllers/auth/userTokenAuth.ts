@@ -29,7 +29,7 @@ export const userTokenAuth = async (req: Request, res: Response) => {
 
     // check for the user's details in db
 
-    const userInDb = await prisma.users.findUnique({
+    const userInDb = await prisma.users.findFirst({
       where: {
         Email: isVerified.email,
       },
