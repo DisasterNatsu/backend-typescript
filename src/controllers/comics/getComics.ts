@@ -135,6 +135,8 @@ export const GetLatestEight = async (req: Request, res: Response) => {
 
     return res.status(200).json(mergedData); // Sending Response
   } catch (error) {
+    console.log(error);
+
     // Respond if there is an error
     return res.status(500).json({
       error: error || "Unknown error",
