@@ -9,6 +9,10 @@ const ZipUpload = (req: Request, res: Response, next: NextFunction) => {
 
   const { dir } = tempDir({ folder: "temp" });
 
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
   // define storage
 
   const storage = multer.diskStorage({

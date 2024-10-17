@@ -1,4 +1,7 @@
-import { AllChapters, ChapterPages } from "controllers/chapter/getChapters";
+import {
+  AllChapters,
+  ChapterPages,
+} from "../../controllers/chapter/getChapters";
 import express from "express";
 
 const Router = express.Router();

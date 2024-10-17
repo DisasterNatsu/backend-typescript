@@ -118,3 +118,71 @@ export const AdminLogIn = async (req: Request, res: Response) => {
     return async () => prisma.$disconnect();
   }
 };
+
+export const ResetPassword = async (req: Request, res: Response) => {
+  const { email, password, newPassword } = req.body;
+
+  if (!email || !password || !newPassword) {
+    return res
+      .status(400)
+      .json({
+        message: "Email, current password, and new password are required",
+      });
+  } else if (newPassword.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password must be more than 6 characters long" });
+  }
+
+  try {
+    // Find the admin by email
+    const adminInDb = await prisma.admin.findFirst({
+      where: {
+        Email: email,
+      },
+    });
+
+    if (adminInDb) {
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        adminInDb.Password
+      );
+
+      if (isPasswordValid) {
+        const salt = await bcrypt.genSalt();
+        const passwordHash = await bcrypt.hash(newPassword, salt);
+
+        // Use the id to update the password
+        await prisma.admin.update({
+          where: {
+            id: adminInDb.id,
+          },
+          data: {
+            Password: passwordHash,
+          },
+        });
+
+        return res
+          .status(200)
+          .json({ message: "Password updated successfully!" });
+      } else {
+        return res
+          .status(403)
+          .json({ message: "Current password is incorrect" });
+      }
+    } else {
+      return res
+        .status(403)
+        .json({ message: "No admin with the provided email was found" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({
+        error,
+        message: "An error occurred while resetting the password",
+      });
+  } finally {
+    await prisma.$disconnect();
+  }
+};

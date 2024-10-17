@@ -23,7 +23,7 @@ interface Folder {
 }
 
 interface uploadToBackBlazeProps {
-  mime: string;
+  mime?: string;
   targetDir: string;
   bucketId: string;
   apiUrl: string;
@@ -57,4 +57,64 @@ interface BackBlazeResponse {
   legalHold: { isClientAuthorizedToRead: boolean; value: null };
   serverSideEncryption: { algorithm: any | null; mode: any | null };
   uploadTimestamp: number;
+}
+
+interface Chapter {
+  chapterID: BigInt | number; // Ensure this matches your actual data type
+  ComicTitle: string | null;
+  comicID: string;
+  ChapterNumber: string;
+  ChapterName: string | null;
+  pages: string;
+  chapterDate: Date | null;
+}
+
+interface RawChapter {
+  chapterID: number;
+  ComicTitle: string;
+  comicID: string;
+  ChapterNumber: string;
+  ChapterName: string;
+  chapterDate: Date; // Use Date if the field is of type DateTime
+}
+
+interface TransformedChapter {
+  chapterID: number;
+  ChapterNumber: string;
+  ChapterName: string;
+  chapterDate: string; // ISO Date String
+}
+
+interface TransformedComic {
+  ComicTitle: string;
+  comicID: string;
+  CoverImage: string;
+  chapters: TransformedChapter[];
+}
+
+interface Covers {
+  id: string;
+  CoverImage: string;
+}
+
+interface CoverAddedComic {
+  ComicTitle: string;
+  comicID: string;
+  CoverImage: string;
+  chapters: TransformedChapter[];
+}
+
+interface ResetPasswordTokenRes {
+  email?: string;
+  password?: string;
+  iat?: number;
+  exp?: number;
+  success?: boolean;
+  message?: string;
+}
+
+declare module "file-type" {
+  export function fromFile(
+    path: string
+  ): Promise<{ ext: string; mime: string } | null>;
 }

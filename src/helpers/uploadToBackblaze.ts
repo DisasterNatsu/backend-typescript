@@ -8,7 +8,8 @@ import { getUploadUrl } from "./backBlazeGetUploadUrl";
 
 const sha1 = (fileData: Buffer) => {
   const hash = crypto.createHash("sha1");
-  hash.update(fileData);
+  // @ts-ignore
+  hash.update(fileData); // Directly use the Buffer
   return hash.digest("hex");
 };
 
@@ -19,52 +20,53 @@ export const uploadToBackBlaze = async ({
   apiUrl,
   authorizationToken,
 }: uploadToBackBlazeProps) => {
-  // declare dir
-
+  // Declare directory
   const { dir } = tempDir({ folder: targetDir });
 
-  const fileType = mime;
-
-  // get the files from the dir
-
+  // Get the files from the directory
   const filesArray = fs.readdirSync(dir);
 
   const uploadPromises = filesArray.map(async (file) => {
-    // get upload url for every file
-
-    const urlRes = await getUploadUrl({
-      apiUrl: apiUrl,
-      authorizationToken: authorizationToken,
-      bucketId: bucketId,
-    });
-
-    const { uploadUrlToken, uploadUrl } = urlRes as UploadUrlResult;
-
-    // get fileData
-
-    const data = fs.readFileSync(path.join(dir, file)); // filedata
-    const uploadFileName = path.join(file); // file name
-    const url = uploadUrl; // upload Url
-    const token = uploadUrlToken;
-    const urlEncodedFileName = getUrlEncodedFileName(uploadFileName);
-
-    const headers = {
-      Authorization: token,
-      "Content-Type": mime || "b2/x-auto",
-      "Content-Length": data.byteLength || data.length,
-      "X-Bz-File-Name": urlEncodedFileName,
-      "X-Bz-Content-Sha1": data ? sha1(data) : null,
-    };
+    const filePath = path.join(dir, file);
 
     try {
+      // Get upload URL for every file
+      const urlRes = await getUploadUrl({
+        apiUrl,
+        authorizationToken,
+        bucketId,
+      });
+
+      const { uploadUrlToken, uploadUrl } = urlRes as UploadUrlResult;
+
+      // Read file data
+      const data = fs.readFileSync(filePath);
+      const urlEncodedFileName = getUrlEncodedFileName(file);
+
+      // Prepare headers
+      const headers = {
+        Authorization: uploadUrlToken,
+        "Content-Type": mime || "b2/x-auto",
+        "Content-Length": data.length,
+        "X-Bz-File-Name": urlEncodedFileName,
+        "X-Bz-Content-Sha1": sha1(data),
+      };
+
+      // Upload file
       const backBlazeRes = await axios.post(uploadUrl, data, { headers });
-      return backBlazeRes.data.fileId;
+      return backBlazeRes.data.fileId; // Return file ID on successful upload
     } catch (error) {
-      return console.log(error);
+      console.error(`Error uploading file ${file}:`, error);
+      throw error; // Rethrow the error for better error handling up the stack
     }
   });
 
-  const ids = await Promise.all(uploadPromises);
-
-  return ids;
+  // Wait for all uploads to complete
+  try {
+    const ids = await Promise.all(uploadPromises);
+    return ids;
+  } catch (error) {
+    console.error("Error uploading files:", error);
+    throw new Error("Upload failed for one or more files.");
+  }
 };

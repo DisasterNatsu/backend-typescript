@@ -1,8 +1,8 @@
+import express from "express";
 import { AdminAuthMiddleware } from "middlewares/authMiddleware/adminAuth";
 import { postComic } from "../../controllers/comics/postComic";
-import express from "express";
-import { UploadComicCover } from "middlewares/new-comic/multerComicCover";
-import { CoverUploadToBackBlaze } from "middlewares/backBlaze/coverUpload";
+import { UploadComicCover } from "../../middlewares/new-comic/multerComicCover";
+import { CoverUploadToBackBlaze } from "../../middlewares/backBlaze/coverUpload";
 
 const router = express.Router();
 

@@ -10,6 +10,7 @@ export const UnZip = async (
   next: NextFunction
 ) => {
   const { dir } = tempDir({ folder: "chapterTemp" });
+  const dir2 = tempDir({ folder: "temp" });
 
   try {
     if (!fs.existsSync(dir)) {
@@ -17,10 +18,15 @@ export const UnZip = async (
     }
 
     if (req.file) {
-      const originPath = path.join(__dirname, "temp", req.file.filename);
+      const originPath = path.join(dir2.dir, req.file.filename);
+      console.log(originPath);
+
       const dist = dir;
 
       await decompress(originPath, dist);
+      if (fs.existsSync(dir2.dir)) {
+        fs.rmdirSync(dir2.dir, { recursive: true });
+      }
       next();
     } else {
       return res.status(400).json({ error: "File is missing" });

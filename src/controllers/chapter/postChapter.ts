@@ -15,7 +15,7 @@ export const PostChapter = async (req: Request, res: Response) => {
 
   const imageIds = JSON.stringify(req.chapterImages);
 
-  if (!comicTitle || !chapterNumber || !chapterName || !comicID) {
+  if (!comicTitle || !chapterNumber || !comicID) {
     return res
       .status(401)
       .json({ message: "Necessary Datas were not provided" });

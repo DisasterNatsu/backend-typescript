@@ -28,7 +28,7 @@ export const postComic = async (req: Request, res: Response) => {
 
   const randomId = UniqueRandom(10000, 99999);
 
-  const id = randomId(); // call the Id generator function
+  const id = randomId().toString(); // call the Id generator function
 
   // try catch block
 
@@ -40,7 +40,7 @@ export const postComic = async (req: Request, res: Response) => {
       CoverImage: coverImage || "",
       Origin: origin,
       Status: status,
-      Genre: genres,
+      Genres: genres,
       Author: author,
       Artist: artist,
       Badges: badge,
@@ -55,7 +55,7 @@ export const postComic = async (req: Request, res: Response) => {
     if (postComictoDb.ComicTitle) {
       // the link
 
-      const link = `https://disasterscans.com/comics/${
+      const link = `/comics/${
         postComictoDb.id
       }-${postComictoDb.ComicTitle.toLowerCase().split(" ").join("-")}`;
 

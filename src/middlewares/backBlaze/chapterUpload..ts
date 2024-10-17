@@ -1,68 +1,69 @@
 import fs from "fs";
 import path from "path";
-import { NextFunction, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { tempDir } from "helpers/tempDir";
-import { backblazeAuthorize } from "helpers/backBlazeAuthorize";
-import { uploadToBackBlaze } from "helpers/uploadToBackblaze";
+import { NextFunction, Request, Response } from "express";
+import { tempDir } from "../../helpers/tempDir";
+import { backblazeAuthorize } from "../../helpers/backBlazeAuthorize";
+import { uploadToBackBlaze } from "../../helpers/uploadToBackblaze";
 
 export const chapterUploadToBackBlaze = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  // define the dir
-
+  // Define the directory
   const { dir } = tempDir({ folder: "chapterTemp" });
 
-  // try catch block
-
+  // Try-catch block to handle errors
   try {
-    // getting header token
+    // Check if the file exists in the request
+    // Read files from the directory
+    const files = fs.readdirSync(dir);
 
+    if (files.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No files found in the directory" });
+    }
+
+    // Get the Backblaze credentials from environment variables
     const applicationKey = process.env.BACKBLAZE_MASTER_APPLICATION_KEY_ID!;
-
     const applicationID = process.env.BACKBLAZE_MASTER_APPLICATION_ID!;
+    const bucketID = process.env.BACKBLAZE_BUCKET_ID!;
 
-    // authorize backblaze and get the api url and authtoken
-
+    // Authorize Backblaze and get the API URL and auth token
     const result = await backblazeAuthorize({
       applicationKey: applicationKey,
       applicationID: applicationID,
     });
 
-    // // Use type assertion to inform TypeScript about the actual type
+    // Use type assertion to inform TypeScript about the actual type
     const { apiUrl, authToken } = result as BackblazeAuthorizeResult;
 
-    // bucketid
-
-    const bucketID = process.env.BACKBLAZE_BUCKET_ID!;
-
-    // declare mimetype
-
-    const mime = "image/png" || "image/jpg" || "image/jpeg" || "image/webp";
+    // Define allowed MIME types
+    const mimeTypes = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
 
     const fileId = await uploadToBackBlaze({
       targetDir: "chapterTemp",
-      mime: mime,
       bucketId: bucketID,
-      apiUrl: apiUrl,
+      apiUrl,
       authorizationToken: authToken,
     });
 
     req.chapterImages = fileId;
 
-    fs.rmSync(dir, { recursive: true });
-
+    // Clean up temp directory asynchronously
+    await fs.rmSync(dir, { recursive: true, force: true });
     next();
   } catch (error) {
-    fs.rmdirSync(dir, { recursive: true });
+    // In case of an error, remove the temporary directory
+    fs.rmSync(dir, { recursive: true });
 
-    console.log(error);
+    console.error(error);
 
     return res.status(500).json({
       error,
-      message: "Something wrong with the backblaze upload",
+      message: "Something went wrong with the Backblaze upload",
     });
   }
 };

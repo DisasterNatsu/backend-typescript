@@ -43,11 +43,8 @@ export const CoverUploadToBackBlaze = async (
 
     // declare mimetype
 
-    const mime = "image/png" || "image/jpg" || "image/jpeg" || "image/webp";
-
     const fileId = await uploadToBackBlaze({
       targetDir: "temp",
-      mime: mime,
       bucketId: bucketID,
       apiUrl: apiUrl,
       authorizationToken: authToken,
