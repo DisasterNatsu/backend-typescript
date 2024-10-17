@@ -1,8 +1,8 @@
+import { NextFunction, Request, Response } from "express";
 import multer from "multer";
 import fs from "fs";
 
-import { NextFunction, Request, Response } from "express";
-import { tempDir } from "helpers/tempDir";
+import { tempDir } from "../../helpers/tempDir";
 
 const ZipUpload = (req: Request, res: Response, next: NextFunction) => {
   // create a temporary directory to store the zip file for further prossesing

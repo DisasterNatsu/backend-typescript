@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const postChapter_1 = require("../../controllers/chapter/postChapter");
 const express_1 = __importDefault(require("express"));
+const postChapter_1 = require("../../controllers/chapter/postChapter");
 const adminAuth_1 = require("../../middlewares/authMiddleware/adminAuth");
 const chapterUpload_1 = require("../../middlewares/backBlaze/chapterUpload.");
 const handleZip_1 = require("../../middlewares/new-chapter/handleZip");

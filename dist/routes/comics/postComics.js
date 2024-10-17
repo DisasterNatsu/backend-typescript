@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const adminAuth_1 = require("middlewares/authMiddleware/adminAuth");
+const adminAuth_1 = require("../../middlewares/authMiddleware/adminAuth");
 const postComic_1 = require("../../controllers/comics/postComic");
 const multerComicCover_1 = require("../../middlewares/new-comic/multerComicCover");
 const coverUpload_1 = require("../../middlewares/backBlaze/coverUpload");

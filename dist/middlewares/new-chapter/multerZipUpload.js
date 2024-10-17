@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const multer_1 = __importDefault(require("multer"));
 const fs_1 = __importDefault(require("fs"));
-const tempDir_1 = require("helpers/tempDir");
+const tempDir_1 = require("../../helpers/tempDir");
 const ZipUpload = (req, res, next) => {
     // create a temporary directory to store the zip file for further prossesing
     const { dir } = (0, tempDir_1.tempDir)({ folder: "temp" });

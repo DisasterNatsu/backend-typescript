@@ -1,8 +1,8 @@
 import decompress from "decompress";
 import { NextFunction, Request, Response } from "express";
-import fs from "fs";
-import { tempDir } from "helpers/tempDir";
 import path from "path";
+import fs from "fs";
+import { tempDir } from "../../helpers/tempDir";
 
 export const UnZip = async (
   req: Request,

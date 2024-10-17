@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UnZip = void 0;
 const decompress_1 = __importDefault(require("decompress"));
-const fs_1 = __importDefault(require("fs"));
-const tempDir_1 = require("helpers/tempDir");
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const tempDir_1 = require("../../helpers/tempDir");
 const UnZip = async (req, res, next) => {
     const { dir } = (0, tempDir_1.tempDir)({ folder: "chapterTemp" });
     const dir2 = (0, tempDir_1.tempDir)({ folder: "temp" });

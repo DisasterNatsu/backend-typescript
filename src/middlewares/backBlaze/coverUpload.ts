@@ -3,9 +3,9 @@ import fs from "fs";
 import { promisify } from "util";
 import { NextFunction, Request, Response } from "express";
 
-import { backblazeAuthorize } from "helpers/backBlazeAuthorize";
-import { tempDir } from "helpers/tempDir";
-import { uploadToBackBlaze } from "helpers/uploadToBackblaze";
+import { backblazeAuthorize } from "../../helpers/backBlazeAuthorize";
+import { tempDir } from "../../helpers/tempDir";
+import { uploadToBackBlaze } from "../../helpers/uploadToBackblaze";
 
 const readdirAsync = promisify(fs.readdir);
 

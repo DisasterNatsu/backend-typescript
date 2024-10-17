@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postComic = void 0;
-const idGenerator_1 = __importDefault(require("helpers/idGenerator"));
+const idGenerator_1 = __importDefault(require("../../helpers/idGenerator"));
 const client_1 = require("@prisma/client");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));

@@ -1,5 +1,5 @@
 import express from "express";
-import { AdminAuthMiddleware } from "middlewares/authMiddleware/adminAuth";
+import { AdminAuthMiddleware } from "../../middlewares/authMiddleware/adminAuth";
 import { postComic } from "../../controllers/comics/postComic";
 import { UploadComicCover } from "../../middlewares/new-comic/multerComicCover";
 import { CoverUploadToBackBlaze } from "../../middlewares/backBlaze/coverUpload";

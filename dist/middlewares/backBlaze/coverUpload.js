@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoverUploadToBackBlaze = void 0;
 const fs_1 = __importDefault(require("fs"));
 const util_1 = require("util");
-const backBlazeAuthorize_1 = require("helpers/backBlazeAuthorize");
-const tempDir_1 = require("helpers/tempDir");
-const uploadToBackblaze_1 = require("helpers/uploadToBackblaze");
+const backBlazeAuthorize_1 = require("../../helpers/backBlazeAuthorize");
+const tempDir_1 = require("../../helpers/tempDir");
+const uploadToBackblaze_1 = require("../../helpers/uploadToBackblaze");
 const readdirAsync = (0, util_1.promisify)(fs_1.default.readdir);
 const CoverUploadToBackBlaze = async (req, res, next) => {
     // define the dir

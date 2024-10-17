@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { ParseParams, ParseParamsChapter } from "helpers/urlParser";
+import { ParseParams, ParseParamsChapter } from "../../helpers/urlParser";
 
 const prisma = new PrismaClient();
 

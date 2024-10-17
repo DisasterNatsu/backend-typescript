@@ -4,7 +4,7 @@ import {
   createCoverImageLookup,
   mergeChapters,
   transformData,
-} from "helpers/chapterGrouping";
+} from "../../helpers/chapterGrouping";
 
 const prisma = new PrismaClient();
 

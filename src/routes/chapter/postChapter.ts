@@ -1,5 +1,5 @@
-import { PostChapter } from "../../controllers/chapter/postChapter";
 import express from "express";
+import { PostChapter } from "../../controllers/chapter/postChapter";
 import { AdminAuthMiddleware } from "../../middlewares/authMiddleware/adminAuth";
 import { chapterUploadToBackBlaze } from "../../middlewares/backBlaze/chapterUpload.";
 import { UnZip } from "../../middlewares/new-chapter/handleZip";

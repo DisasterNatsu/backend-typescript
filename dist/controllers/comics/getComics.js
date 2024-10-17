@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetFiveRandomComics = exports.GetLatestEight = exports.AllComics = exports.GetTopEight = void 0;
 const client_1 = require("@prisma/client");
-const chapterGrouping_1 = require("helpers/chapterGrouping");
+const chapterGrouping_1 = require("../../helpers/chapterGrouping");
 const prisma = new client_1.PrismaClient();
 // get the top eight
 const GetTopEight = async (req, res) => {

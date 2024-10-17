@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import UniqueRandom from "helpers/idGenerator";
+import UniqueRandom from "../../helpers/idGenerator";
 import { PrismaClient } from "@prisma/client";
 import path from "path";
 import fs from "fs";

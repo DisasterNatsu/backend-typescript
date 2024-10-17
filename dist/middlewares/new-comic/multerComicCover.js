@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UploadComicCover = void 0;
 const multer_1 = __importDefault(require("multer"));
 const uuid_1 = require("uuid");
-const tempDir_1 = require("helpers/tempDir");
+const tempDir_1 = require("../../helpers/tempDir");
 const fs_1 = __importDefault(require("fs"));
 const UploadComicCover = (req, res, next) => {
     // create a temporary directory to store the zip file for further prossesing

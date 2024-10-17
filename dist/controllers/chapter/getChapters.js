@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChapterPages = exports.AllChapters = void 0;
 const client_1 = require("@prisma/client");
-const urlParser_1 = require("helpers/urlParser");
+const urlParser_1 = require("../../helpers/urlParser");
 const prisma = new client_1.PrismaClient();
 const AllChapters = async (req, res) => {
     // parsing the params to get the data needed

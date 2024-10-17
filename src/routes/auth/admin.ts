@@ -1,10 +1,10 @@
+import express from "express";
 import {
   AdminLogIn,
   AdminSignUp,
   ResetPassword,
 } from "../../controllers/auth/adminAuth";
 import { adminTokenAuth } from "../../controllers/auth/adminTokenAuth";
-import express from "express";
 
 const Router = express.Router();
 
