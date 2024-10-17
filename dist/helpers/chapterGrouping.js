@@ -5,16 +5,23 @@ const mergeChapters = (latestChapters, previousChaptersResults) => {
     // Create a map to store previous chapters by comicID
     const previousChaptersMap = new Map();
     previousChaptersResults.forEach((chapter) => {
-        const { comicID, chapterID, ChapterNumber, ChapterName, chapterDate } = chapter;
-        if (!previousChaptersMap.has(comicID)) {
-            previousChaptersMap.set(comicID, []);
+        // Ensure chapter is defined before destructuring
+        if (chapter) {
+            const { comicID, chapterID, ChapterNumber, ChapterName, chapterDate } = chapter;
+            if (!previousChaptersMap.has(comicID)) {
+                previousChaptersMap.set(comicID, []);
+            }
+            previousChaptersMap.get(comicID).push({
+                chapterID,
+                ChapterNumber,
+                ChapterName,
+                chapterDate,
+            });
         }
-        previousChaptersMap.get(comicID).push({
-            chapterID,
-            ChapterNumber,
-            ChapterName,
-            chapterDate,
-        });
+        else {
+            // Optional: log or handle the null chapter case
+            console.warn("Encountered a null or undefined chapter:", chapter);
+        }
     });
     // Merge latest chapters with previous chapters
     return latestChapters.map((latestComic) => {
